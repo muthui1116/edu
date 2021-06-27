@@ -9,16 +9,15 @@ from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import LoginForm, RegisterForm, CreatePostForm, CommentForm
 from flask_gravatar import Gravatar
-import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', '3c12e8d18401c97c1d39cc37')
+app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
 gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
 
 ##CONNECT TO DB
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///blog.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -80,11 +79,6 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts, current_user=current_user)
 
 
-@app.route('/register1')
-def register1_page():
-    return render_template('register1.html')
-
-
 @app.route('/register', methods=["GET", "POST"])
 def register():
     form = RegisterForm()
@@ -111,7 +105,7 @@ def register():
         login_user(new_user)
         return redirect(url_for("get_all_posts"))
 
-    return render_template("register1.html", form=form, current_user=current_user)
+    return render_template("register.html", form=form, current_user=current_user)
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -135,6 +129,9 @@ def login():
     return render_template("login.html", form=form, current_user=current_user)
 
 
+@app.route('/register1')
+def register1_page():
+    return render_template('register1.html')
 @app.route('/logout')
 def logout():
     logout_user()
